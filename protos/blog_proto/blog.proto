@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package protos;
 
-option go_package = "protos/blog";
+option go_package = "protos/blog_proto";
 
 message Blog {
   string id = 1;

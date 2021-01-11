@@ -1,14 +1,18 @@
 package env_utils
 
 import (
-	"fmt"
+	"github.com/joho/godotenv"
+	"log"
 	"os"
 )
 
-func SetEnvironmentVariable() error {
-	if err := os.Setenv("PORT", fmt.Sprint(50051)); err != nil {
-		return err
+func GetEnvironmentVariable(key string) string {
+	// load .env file
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
 	}
 
-	return nil
+	return os.Getenv(key)
 }
