@@ -2,9 +2,9 @@ package app
 
 import (
 	"fmt"
-	"github.com/Ferza17/gRPC_MongoDB-Blog-API/utils/env_utils"
 	"github.com/Ferza17/gRPC_MongoDB-Blog-API/utils/logger_utils"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 	"os"
@@ -20,15 +20,17 @@ func StartApplication() {
 
 	RpcAPI(s)
 
-	NETWORK := env_utils.GetEnvironmentVariable("NETWORK")
-	ADDRESS := env_utils.GetEnvironmentVariable("PORT")
-	lis, err := net.Listen(NETWORK, ADDRESS)
+	reflection.Register(s)
+
+	//NETWORK := env_utils.GetEnvironmentVariable("NETWORK")
+	//ADDRESS := env_utils.GetEnvironmentVariable("PORT")
+	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 
 	if err != nil {
 		logger_utils.Error("Error while listening Network: ", err)
 	}
 	go func() {
-		logger_utils.Info("Starting Server...")
+		logger_utils.Info("Starting gRPC Server...")
 		if err := s.Serve(lis); err != nil {
 			logger_utils.Error(fmt.Sprintln("Unable to serve : ", err), err)
 		}
