@@ -2,7 +2,6 @@ package blog
 
 import (
 	"context"
-	"fmt"
 	"github.com/Ferza17/gRPC_MongoDB-Blog-API/datasources/mongodb/blog_db"
 	"github.com/Ferza17/gRPC_MongoDB-Blog-API/utils/logger_utils"
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,20 +9,24 @@ import (
 )
 
 //TODO : return *errors_utils
-func (blog *Blog) Get() error {
+func (blog *Blog) GetById() error {
 	db := blog_db.Client.Database("gRPC_Blog")
 	collection := db.Collection("blogs")
 	defer blog_db.Client.Disconnect(context.Background())
 
-	res, err := collection.Find(context.Background(), bson.M{})
-
+	var result Blog
+	filter := bson.D{primitive.E{Key: "_id", Value: blog.ID}}
+	err := collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
-		// TODO Return Error
-		logger_utils.Error("Error while Find Collection.", err)
+		logger_utils.Error("Error while FindOne. ", err)
 		return err
 	}
 
-	logger_utils.Info(fmt.Sprintln(res))
+	blog.AuthorId = result.AuthorId
+	blog.Title = result.Title
+	blog.Content = result.Content
+
+
 	return nil
 
 }
