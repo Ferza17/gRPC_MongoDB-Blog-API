@@ -13,14 +13,14 @@ type blogServiceStruct struct {
 }
 
 type blogServiceInterface interface {
-	Get(id primitive.ObjectID) (*blog.Blog, error)
+	GetById(id primitive.ObjectID) (*blog.Blog, error)
 	Create(blog blog.Blog) (*blog.Blog, error)
 }
 
-func (s *blogServiceStruct) Get(id primitive.ObjectID) (*blog.Blog, error) {
+func (s *blogServiceStruct) GetById(id primitive.ObjectID) (*blog.Blog, error) {
 	result := &blog.Blog{ID: id}
 
-	if err := result.Get(); err != nil {
+	if err := result.GetById(); err != nil {
 		return nil, err
 	}
 	return result, nil

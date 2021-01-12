@@ -19,16 +19,17 @@ func main() {
 	defer cc.Close()
 
 	c := blog_proto.NewBlogServiceClient(cc)
-	doUnary(c)
+	//doUnary(c)
+	doUnarySearchById(c)
 }
 
 func doUnary(c blog_proto.BlogServiceClient) {
 	fmt.Println("Starting to do a Unary RPC...")
 	req := &blog_proto.CreateBlogRequest{
 		Blog: &blog_proto.Blog{
-			AuthorId: "Fery Reza",
-			Title: "This is Title 1",
-			Content: "Content of the Blog",
+			AuthorId: "Aditya",
+			Title:    "My Awesome Blog",
+			Content:  "Content of the Blog",
 		},
 	}
 
@@ -38,4 +39,16 @@ func doUnary(c blog_proto.BlogServiceClient) {
 	}
 
 	log.Printf("Response From Greet: %v", res.GetBlog())
+}
+
+func doUnarySearchById(c blog_proto.BlogServiceClient) {
+	fmt.Println("About to start doUnarySearchById...")
+	req := &blog_proto.ReadBlogRequest{BlogId: "5ffd3775164fb066d0d38eb7"}
+
+	res, err := c.ReadBlog(context.Background(), req)
+	if err != nil {
+		log.Fatalf("Error While ReadBlog!")
+	}
+
+	log.Println("Response From ReadBlog : ", res)
 }
