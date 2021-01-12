@@ -19,7 +19,6 @@ func StartApplication() {
 	s := grpc.NewServer(opts...)
 
 	RpcAPI(s)
-
 	reflection.Register(s)
 
 	//NETWORK := env_utils.GetEnvironmentVariable("NETWORK")
@@ -29,6 +28,7 @@ func StartApplication() {
 	if err != nil {
 		logger_utils.Error("Error while listening Network: ", err)
 	}
+
 	go func() {
 		logger_utils.Info("Starting gRPC Server...")
 		if err := s.Serve(lis); err != nil {
@@ -47,7 +47,7 @@ func StartApplication() {
 	s.Stop()
 	fmt.Println("Closing the listener")
 	if err := lis.Close(); err != nil {
-		logger_utils.Info("Error While stopping server.")
+		logger_utils.Error("Error While stopping server.", err)
 	}
 	fmt.Println("Closing program")
 

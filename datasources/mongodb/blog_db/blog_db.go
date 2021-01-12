@@ -1,17 +1,17 @@
 package blog_db
 
 import (
-	"context"
 	"github.com/Ferza17/gRPC_MongoDB-Blog-API/utils/env_utils"
 	"github.com/Ferza17/gRPC_MongoDB-Blog-API/utils/logger_utils"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 var (
 	mongodbUrl = env_utils.GetEnvironmentVariable("MONGODB_URL")
 	Client     *mongo.Client
+	Database   *mongo.Database
+	Collection *mongo.Collection
 )
 
 func init() {
@@ -21,11 +21,9 @@ func init() {
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	err = mongoClient.Connect(ctx)
-
-	// use Blog Database
-	logger_utils.Info("Database Successfully Connected!")
 	Client = mongoClient
+	Database = Client.Database("gRPC_Blog")
+	Collection = Database.Collection("blogs")
+	logger_utils.Info("Database Successfully configured")
+
 }
