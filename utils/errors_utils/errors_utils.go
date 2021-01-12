@@ -2,23 +2,17 @@ package errors_utils
 
 import (
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-type RpcError struct {
-	Code    codes.Code
-	Message string
+func InvalidArgument(message string) error {
+	return status.Error(codes.InvalidArgument, message)
 }
 
-func Cancelled(message string) *RpcError {
-	return &RpcError{
-		Code:    codes.Canceled,
-		Message: message,
-	}
+func NotFound(message string) error {
+	return status.Error(codes.NotFound, message)
 }
 
-func InvalidArgument(message string) *RpcError {
-	return &RpcError{
-		Code: codes.InvalidArgument,
-		Message: message,
-	}
+func Internal(message string) error {
+	return status.Error(codes.Internal, message)
 }
